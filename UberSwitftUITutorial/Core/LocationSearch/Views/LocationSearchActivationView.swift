@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SearchActivationView: View {
+struct LocationSearchActivationView: View {
     var body: some View {
         HStack{
             
@@ -29,8 +29,8 @@ struct SearchActivationView: View {
     }
 }
 
-struct SearchActivationView_Previews: PreviewProvider {
+struct LocationSearchActivationView_Previews: PreviewProvider {
     static var previews: some View {
-        SearchActivationView()
+        LocationSearchActivationView()
     }
 }
