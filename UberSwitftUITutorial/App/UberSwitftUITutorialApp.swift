@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct UberSwitftUITutorialApp: App {
+    @StateObject var locationViewModel = LocationSearchViewModel()
+    
     var body: some Scene {
         WindowGroup {
             HomeView()
+                .environmentObject(locationViewModel)// allow to utilize this singular instance of the locationSearchViewModel(note that @StateObject var locationViewModel = LocationSearchViewModel() shows in LocationSearchView and UberMapViewRepresentable so this environmentObject to bind them to be used across multiple places in the app
+            // this is call CASTING
         }
     }
 }

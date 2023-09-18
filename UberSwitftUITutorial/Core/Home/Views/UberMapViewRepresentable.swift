@@ -11,6 +11,7 @@ import MapKit
 struct UberMapViewRepresentable: UIViewRepresentable{
     let mapView = MKMapView()
     let locationManager = LocationManager()
+    @EnvironmentObject var locationViewModel: LocationSearchViewModel
     
     func makeUIView(context: Context) -> some UIView {//A context structure containing information about the current state of the system.
 
@@ -21,9 +22,15 @@ struct UberMapViewRepresentable: UIViewRepresentable{
         
        return mapView
     }
+    
     func updateUIView(_ uiView: UIViewType, context: Context) {
+        if let coordinate = locationViewModel.selectedLocationCoordinate{
+            print("DEBUG: Selected location in map view \(coordinate)")
+            context.coordinator.addAndSelectAnnotation(withCoodirnate: coordinate) // pass the selected coor
+        }
         
     }
+    
     func makeCoordinator() -> MapCoordinator {
         return MapCoordinator(parent: self)// self refers to the current instance of UberMapViewRepresentable, cannot put UberMapViewRepresentable
     }
@@ -32,11 +39,20 @@ struct UberMapViewRepresentable: UIViewRepresentable{
 
 extension UberMapViewRepresentable{// the coordinate itself
     class MapCoordinator: NSObject, MKMapViewDelegate{// a middleman between swiftUI view and UIKit functionality
+        
+        //MARK: - Properties
+        
         let parent : UberMapViewRepresentable
+        
+        //MARK: - Lifecycycle
+        
         init(parent: UberMapViewRepresentable) {
             self.parent = parent
             super.init()
         }
+        
+        //MARK: - MKMapViewDelegate
+        
         func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {// tell the delegate that the location of the user was updated
             let region = MKCoordinateRegion(
                 center: CLLocationCoordinate2D(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude),
@@ -44,6 +60,14 @@ extension UberMapViewRepresentable{// the coordinate itself
                 
             )
             parent.mapView.setRegion(region, animated: true)
+        }
+        //MARK: - helpers
+        
+        func addAndSelectAnnotation(withCoodirnate coordinate: CLLocationCoordinate2D){
+            let anno = MKPointAnnotation()
+            anno.coordinate = coordinate
+            self.parent.mapView.addAnnotation(anno)
+            self.parent.mapView.selectAnnotation(anno, animated:true)
             
         }
     }
