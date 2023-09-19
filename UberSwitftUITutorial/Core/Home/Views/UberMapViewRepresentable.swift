@@ -23,10 +23,11 @@ struct UberMapViewRepresentable: UIViewRepresentable{
        return mapView
     }
     
+    
     func updateUIView(_ uiView: UIViewType, context: Context) {
         if let coordinate = locationViewModel.selectedLocationCoordinate{
             print("DEBUG: Selected location in map view \(coordinate)")
-            context.coordinator.addAndSelectAnnotation(withCoodirnate: coordinate) // pass the selected coor
+            context.coordinator.addAndSelectAnnotation(withCoodirnate: coordinate)
         }
         
     }
@@ -43,6 +44,7 @@ extension UberMapViewRepresentable{// the coordinate itself
         //MARK: - Properties
         
         let parent : UberMapViewRepresentable
+        var userLocationCoordinate: CLLocationCoordinate2D?
         
         //MARK: - Lifecycycle
         
@@ -54,6 +56,7 @@ extension UberMapViewRepresentable{// the coordinate itself
         //MARK: - MKMapViewDelegate
         
         func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {// tell the delegate that the location of the user was updated
+            self.userLocationCoordinate = userLocation.coordinate
             let region = MKCoordinateRegion(
                 center: CLLocationCoordinate2D(latitude: userLocation.coordinate.latitude, longitude: userLocation.coordinate.longitude),
                 span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)//The MKCoordinateSpan represents the amount of map to display for a specific region. It is defined by the latitudeDelta and longitudeDelta properties, which determine the zoom level or visible area on the map.
@@ -64,11 +67,34 @@ extension UberMapViewRepresentable{// the coordinate itself
         //MARK: - helpers
         
         func addAndSelectAnnotation(withCoodirnate coordinate: CLLocationCoordinate2D){
+            parent.mapView.removeAnnotations(parent.mapView.annotations)
             let anno = MKPointAnnotation()
             anno.coordinate = coordinate
-            self.parent.mapView.addAnnotation(anno)
-            self.parent.mapView.selectAnnotation(anno, animated:true)
+            parent.mapView.addAnnotation(anno)
+            parent.mapView.selectAnnotation(anno, animated:true)
+            parent.mapView.showAnnotations(parent.mapView.annotations, animated: true)// to zoom the mapView to fit the current Location and annotation region of the annotation
+            //use self. when inside of block like completionHandler
             
+            func configurePolyLine(withDestinationCoordinate coordinate: CLLocationCoordinate2D){
+                getDestinationRoute(from: <#T##CLLocationCoordinate2D#>, to: <#T##CLLocationCoordinate2D#>, completion: <#T##(MKRoute) -> Void#>)
+            }
+        }
+        func getDestinationRoute(from userlocation: CLLocationCoordinate2D, to destination: CLLocationCoordinate2D, completion: @escaping(MKRoute) -> Void){
+            let userPlacemark = MKPlacemark(coordinate: userlocation)
+            let destPlacemark = MKPlacemark(coordinate: destination)
+            let request = MKDirections.Request()
+            request.source = MKMapItem(placemark: userPlacemark)
+            request.destination = MKMapItem(placemark: destPlacemark)
+            let direction = MKDirections(request: request)
+            
+            direction.calculate(){ response, error in
+                if let error = error{
+                    print("DEBUG: Failed tp get direction with error\(error.localizedDescription)")
+                    return
+                }
+                guard let route = response?.routes.first else{return}// why first because according to Apple Map there will be various directions to choose from but the first one is always the fastest
+                completion(route)
+            }
         }
     }
 }
