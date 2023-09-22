@@ -14,7 +14,7 @@ struct MapViewActionButton: View {
             withAnimation(.spring()){
                 actionForState(mapState)
             }        } label: {
-                Image(systemName: showLocationSearchView ? "arrow.left" : "line.3.horizontal")
+                Image(systemName:imageNameForState(mapState))
                 .font(.title)//possible to use font for image
                 .foregroundColor(.black)
                 .padding()
@@ -33,12 +33,21 @@ struct MapViewActionButton: View {
             mapState = .noInput
         case .locationSelected:
             print("DEBUG: Clear Map View...")
+            mapState = .noInput
+        }
+    }
+    func imageNameForState(_ state: MapViewState) -> String{
+        switch state {
+        case .noInput:
+            return "line.3.horizontal"
+        case .searchingForLocation, .locationSelected:
+            return "arrow.left"
         }
     }
 }
 
 struct MapViewActionButton_Previews: PreviewProvider {
     static var previews: some View {
-        MapViewActionButton()
+        MapViewActionButton(mapState: .constant(.noInput))
     }
 }

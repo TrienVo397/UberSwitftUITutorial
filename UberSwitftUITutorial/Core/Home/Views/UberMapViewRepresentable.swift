@@ -11,6 +11,7 @@ import MapKit
 struct UberMapViewRepresentable: UIViewRepresentable{
     let mapView = MKMapView()
     let locationManager = LocationManager()
+    @Binding var mapState: MapViewState
     @EnvironmentObject var locationViewModel: LocationSearchViewModel
     
     func makeUIView(context: Context) -> some UIView {//A context structure containing information about the current state of the system.
@@ -25,10 +26,25 @@ struct UberMapViewRepresentable: UIViewRepresentable{
     
     
     func updateUIView(_ uiView: UIViewType, context: Context) {
-//        if let coordinate = locationViewModel.selectedLocationCoordinate{
-//            print("DEBUG: Selected location in map view \(coordinate)")
-//            context.coordinator.addAndSelectAnnotation(withCoodirnate: coordinate)
-//            context.coordinator.configurePolyLine(withDestinationCoordinate: coordinate)
+        print("DEBUG: Map state is \(mapState)")
+        
+        switch mapState {
+        case .noInput:
+            context.coordinator.clearMapViewAndRecenterUserLocation()
+            break
+        case .searchingForLocation:
+            break
+        case .locationSelected:
+            if let coordinate = locationViewModel.selectedLocationCoordinate{
+                print("DEBUG: Selected location in map view \(coordinate)")
+                context.coordinator.addAndSelectAnnotation(withCoodirnate: coordinate)
+                context.coordinator.configurePolyLine(withDestinationCoordinate: coordinate)
+            }
+            break
+        }
+//
+//        if mapState == .noInput{
+//            context.coordinator.clearMapViewAndRecenterUserLocation()
 //        }
         
     }
@@ -46,6 +62,7 @@ extension UberMapViewRepresentable{// the coordinate itself
         
         let parent : UberMapViewRepresentable
         var userLocationCoordinate: CLLocationCoordinate2D?
+        var currentRegion: MKCoordinateRegion?
         
         //MARK: - Lifecycycle
         
@@ -63,6 +80,7 @@ extension UberMapViewRepresentable{// the coordinate itself
                 span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)//The MKCoordinateSpan represents the amount of map to display for a specific region. It is defined by the latitudeDelta and longitudeDelta properties, which determine the zoom level or visible area on the map.
                 
             )
+            self.currentRegion = region // users update locations, update the current regions as well
             parent.mapView.setRegion(region, animated: true)
         }
         func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
@@ -110,6 +128,14 @@ extension UberMapViewRepresentable{// the coordinate itself
                 }
                 guard let route = response?.routes.first else{return}// why first because according to Apple Map there will be various directions to choose from but the first one is always the fastest
                 completion(route)
+            }
+        }
+        func clearMapViewAndRecenterUserLocation() {
+            parent.mapView.removeAnnotations(parent.mapView.annotations) // remove annotation
+            parent.mapView.removeOverlays(parent.mapView.overlays)// remove overlay
+            
+            if let currentRegion = currentRegion{
+                parent.mapView.setRegion(currentRegion, animated: true)
             }
         }
     }
