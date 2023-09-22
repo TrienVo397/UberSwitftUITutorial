@@ -12,6 +12,7 @@ struct LocationSearchView: View {
     @Binding var showLocationSearchView: Bool
     @EnvironmentObject var locationViewModel: LocationSearchViewModel
 
+
     var body: some View {
         VStack{
             //header view
@@ -66,5 +67,6 @@ struct LocationSearchView: View {
 struct LocationSearchView_Previews: PreviewProvider {
     static var previews: some View {
         LocationSearchView(showLocationSearchView: .constant(false))
+            .environmentObject(LocationSearchViewModel())
     }
 }

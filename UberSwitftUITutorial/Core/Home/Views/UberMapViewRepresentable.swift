@@ -76,7 +76,7 @@ extension UberMapViewRepresentable{// the coordinate itself
             //use self. when inside of block like completionHandler
             
             func configurePolyLine(withDestinationCoordinate coordinate: CLLocationCoordinate2D){
-                getDestinationRoute(from: <#T##CLLocationCoordinate2D#>, to: <#T##CLLocationCoordinate2D#>, completion: <#T##(MKRoute) -> Void#>)
+//                getDestinationRoute(from: <#T##CLLocationCoordinate2D#>, to: <#T##CLLocationCoordinate2D#>, completion: <#T##(MKRoute) -> Void#>)
             }
         }
         func getDestinationRoute(from userlocation: CLLocationCoordinate2D, to destination: CLLocationCoordinate2D, completion: @escaping(MKRoute) -> Void){

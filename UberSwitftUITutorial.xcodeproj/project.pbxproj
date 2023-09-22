@@ -74,9 +74,9 @@
 				929943D62AB30F7400303CE3 /* Manager */,
 				929943D32AB30F4800303CE3 /* Models */,
 				929943C22AB30D1400303CE3 /* ContentView.swift */,
+				929943F12AB7C50F00303CE3 /* MyPlayground.playground */,
 				929943C42AB30D1600303CE3 /* Assets.xcassets */,
 				929943C62AB30D1600303CE3 /* Preview Content */,
-				929943F12AB7C50F00303CE3 /* MyPlayground.playground */,
 			);
 			path = UberSwitftUITutorial;
 			sourceTree = "<group>";
