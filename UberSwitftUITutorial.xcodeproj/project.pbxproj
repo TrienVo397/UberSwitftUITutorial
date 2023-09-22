@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5801A33F2ABD88A6006CFFDE /* MapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5801A33E2ABD88A6006CFFDE /* MapState.swift */; };
+		58B4D6742ABD72EF00FD2027 /* TabView1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4D6732ABD72EF00FD2027 /* TabView1.swift */; };
+		58B4D6762ABD751700FD2027 /* redHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B4D6752ABD751700FD2027 /* redHomeView.swift */; };
 		929943C12AB30D1400303CE3 /* UberSwitftUITutorialApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929943C02AB30D1400303CE3 /* UberSwitftUITutorialApp.swift */; };
 		929943C32AB30D1400303CE3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 929943C22AB30D1400303CE3 /* ContentView.swift */; };
 		929943C52AB30D1600303CE3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 929943C42AB30D1600303CE3 /* Assets.xcassets */; };
@@ -22,6 +25,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5801A33E2ABD88A6006CFFDE /* MapState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MapState.swift; path = UberSwitftUITutorial/Core/Home/Views/MapState.swift; sourceTree = SOURCE_ROOT; };
+		58B4D6732ABD72EF00FD2027 /* TabView1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabView1.swift; sourceTree = "<group>"; };
+		58B4D6752ABD751700FD2027 /* redHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = redHomeView.swift; sourceTree = "<group>"; };
 		929943BD2AB30D1400303CE3 /* UberSwitftUITutorial.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UberSwitftUITutorial.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		929943C02AB30D1400303CE3 /* UberSwitftUITutorialApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UberSwitftUITutorialApp.swift; sourceTree = "<group>"; };
 		929943C22AB30D1400303CE3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -92,6 +98,7 @@
 		929943D32AB30F4800303CE3 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5801A33E2ABD88A6006CFFDE /* MapState.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -134,6 +141,8 @@
 				929943DC2AB3100100303CE3 /* HomeView.swift */,
 				929943DE2AB3107D00303CE3 /* UberMapViewRepresentable.swift */,
 				929943E92AB5FF1F00303CE3 /* MapViewActionButton.swift */,
+				58B4D6732ABD72EF00FD2027 /* TabView1.swift */,
+				58B4D6752ABD751700FD2027 /* redHomeView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -251,8 +260,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				58B4D6742ABD72EF00FD2027 /* TabView1.swift in Sources */,
 				929943DF2AB3107D00303CE3 /* UberMapViewRepresentable.swift in Sources */,
 				929943DD2AB3100100303CE3 /* HomeView.swift in Sources */,
+				58B4D6762ABD751700FD2027 /* redHomeView.swift in Sources */,
+				5801A33F2ABD88A6006CFFDE /* MapState.swift in Sources */,
 				929943E22AB38B4B00303CE3 /* LocationManager.swift in Sources */,
 				929943F02AB627A000303CE3 /* LocationSearchViewModel.swift in Sources */,
 				929943C32AB30D1400303CE3 /* ContentView.swift in Sources */,
