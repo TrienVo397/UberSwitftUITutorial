@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var showLocationSearchView = false
+    @Binding var showLocationSearchView : Bool
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -36,6 +36,6 @@ struct HomeView: View {
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView()
+        HomeView(showLocationSearchView: .constant(false))
     }
 }

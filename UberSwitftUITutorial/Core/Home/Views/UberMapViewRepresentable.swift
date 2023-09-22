@@ -28,6 +28,7 @@ struct UberMapViewRepresentable: UIViewRepresentable{
         if let coordinate = locationViewModel.selectedLocationCoordinate{
             print("DEBUG: Selected location in map view \(coordinate)")
             context.coordinator.addAndSelectAnnotation(withCoodirnate: coordinate)
+            context.coordinator.configurePolyLine(withDestinationCoordinate: coordinate)
         }
         
     }
@@ -64,10 +65,18 @@ extension UberMapViewRepresentable{// the coordinate itself
             )
             parent.mapView.setRegion(region, animated: true)
         }
+        func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+            let routeline = MKPolylineRenderer(overlay: overlay)
+            routeline.strokeColor = .systemBlue
+            routeline.lineWidth = 6
+            return routeline
+        }
+        
         //MARK: - helpers
         
-        func addAndSelectAnnotation(withCoodirnate coordinate: CLLocationCoordinate2D){
+        func addAndSelectAnnotation(withCoodirnate coordinate: CLLocationCoordinate2D){// create blue route line from the current location to the destination
             parent.mapView.removeAnnotations(parent.mapView.annotations)
+            
             let anno = MKPointAnnotation()
             anno.coordinate = coordinate
             parent.mapView.addAnnotation(anno)
@@ -75,10 +84,17 @@ extension UberMapViewRepresentable{// the coordinate itself
             parent.mapView.showAnnotations(parent.mapView.annotations, animated: true)// to zoom the mapView to fit the current Location and annotation region of the annotation
             //use self. when inside of block like completionHandler
             
-            func configurePolyLine(withDestinationCoordinate coordinate: CLLocationCoordinate2D){
-//                getDestinationRoute(from: <#T##CLLocationCoordinate2D#>, to: <#T##CLLocationCoordinate2D#>, completion: <#T##(MKRoute) -> Void#>)
+        }
+        
+        func configurePolyLine(withDestinationCoordinate coordinate: CLLocationCoordinate2D){
+            guard let userLocationCoordinate = self.userLocationCoordinate else{return}
+            getDestinationRoute(from: userLocationCoordinate, to: coordinate) { route in
+                self.parent.mapView.addOverlay(route.polyline)// add overlay to the mapview
+                
+                
             }
         }
+        
         func getDestinationRoute(from userlocation: CLLocationCoordinate2D, to destination: CLLocationCoordinate2D, completion: @escaping(MKRoute) -> Void){
             let userPlacemark = MKPlacemark(coordinate: userlocation)
             let destPlacemark = MKPlacemark(coordinate: destination)
@@ -87,7 +103,7 @@ extension UberMapViewRepresentable{// the coordinate itself
             request.destination = MKMapItem(placemark: destPlacemark)
             let direction = MKDirections(request: request)
             
-            direction.calculate(){ response, error in
+            direction.calculate(){ response, error in // API callback
                 if let error = error{
                     print("DEBUG: Failed tp get direction with error\(error.localizedDescription)")
                     return
